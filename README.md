@@ -1,9 +1,17 @@
-# Podcast Explorer
+## Brain Food
+An Entertainment Search Web Application
 
-# User Story
-I AM a podcast listener who has run out of content to listen to.
-I WANT a service to help me find new content.
-SO THAT I can stop being bored.
+### Description
+Brain Food is a quick entertainment search tool to help you find content you’ll enjoy in the form of a podcast or book. You can search by keyword or category and get a quick list of 25 relevant podcasts and 25 relevant books to choose from. When you find one you’re interested in exploring further you can click on that result and be taken directly to Apple iTunes or Open Library API to discover more and listen or read!
 
-WHEN I come to the application I want to be able to click a "random button".
-recieve a random podcast.
+### Technologies Used
+- HTML
+- CSS (Bulma)
+- JavaScript
+- Apple iTunes API
+- Open Library API
+
+### Screenshot
+
+
+### Deployed Application

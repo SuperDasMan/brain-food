@@ -7,13 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <title>Brain Food</title>
-    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/60/000000/external-podcast-social-media-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png"/>
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/external-kiranshastry-lineal-color-kiranshastry/64/000000/external-brain-artificial-intelligence-kiranshastry-lineal-color-kiranshastry-2.png"/>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
 <body>
     <header>
-        <h1 class="title is-3 has-text-grey">Brain Food</h1>
+        <img src="https://img.icons8.com/external-kiranshastry-lineal-color-kiranshastry/64/000000/external-brain-artificial-intelligence-kiranshastry-lineal-color-kiranshastry-2.png"/>
+        <h1 class="title is-3 has-text-grey has-text-weight-light">Brain Food</h1>
     </header>
 
     <section class="section">
@@ -24,11 +25,15 @@
                         Search by Keyword
                     </h2>
                     <div class="search-container">
-                        <form id="search-form" class="search-form">
-                            <input name="search" id="search" type="text" autofocus="true" class="form-input" />
-                            <button type="submit" class="btn">Search</button>
-                        </form>
-                        <a href="#recent-searches">Recent Searches</a>
+                        <div class="field" id="search-form">
+                            <form>
+                                <div class="control is-expanded">
+                                    <input type="text" name="search" id="search" autofocus="true" class="input is-rounded" />
+                                </div>
+                                <button type="submit" class="button is-rounded">Search</button>
+                            </form>
+                        </div>
+                        <a href="#recentSearches" class="button is-rounded">Recent Searches</a>
                     </div>
                     <br>
                     <h2>
@@ -61,20 +66,25 @@
                     </div>
                     <br>
                     <div>
-                        <h2>Recent Searches:</h2>
-                        <ul id="recentSearches"></ul>
+                        <h2>Recent Searches</h2>
+                        <div id="recentSearches">
+
+                        </div>
                     </div>
                 </div>
                 <div class="column is-two-fifths">
                     <div>
-                        <h2 class="subtitle"><span id="repo-search-term"></span></h2>
+                        <h2>Podcasts</h2>
                         <div id="podcasts" class="list-group"></div>
                     </div>               
                 </div>
                 <div class="column is-two-fifths">
-                    <div id="book-content"></div>
+                    <div>
+                        <h2>Books</h2>
+                        <div id="book-content"></div>
+                    </div>
                 </div>
-        </div>
+            </div>
         </div>
     </section>
 

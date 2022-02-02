@@ -1,5 +1,6 @@
 var searchFormEl = document.querySelector("#search-form");
 var searchInputEl = document.querySelector("#search");
+var recentSearchesEl = document.querySelector("#recentSearches");
 var categoryBtn = $("#categories");
 var bookContainer = document.getElementById("book-content");
 var recentSearches = JSON.parse(localStorage.getItem("recentSearches"))?JSON.parse(localStorage.getItem("recentSearches")):[];
@@ -47,16 +48,16 @@ var getApplePodShowRepos = function(show) {
         // if connection issue
     }).catch(function(error) {
         // this catch is chained to the end of the ".then"
-        openModal();
+        openModal('rejected', error);
         changeContent("Error: search term not found. Please try again.");
     });
 };
 // pull from Apple Podcasts API - lilly
 
 // pull from Open Library API - Josh
-var getSubjectTitles = function(show) {
+var getSubjectTitles = function(book) {
 
-  var apiUrl = "https://openlibrary.org/search.json?q=" + show + "&limit=20";
+  var apiUrl = "https://openlibrary.org/search.json?q=" + book + "&limit=20";
 
    fetch(apiUrl, {}).then(function(response) {
      // if request is successful
@@ -73,7 +74,7 @@ var getSubjectTitles = function(show) {
     // if connection issue
     }).catch(function(error) {
       // this catch is chained to the end of the ".then"
-      openModal();
+      openModal('rejected', error);
       changeContent("Error: search term not found. Please try again.");
     });
 };
@@ -145,92 +146,99 @@ var displayPods = function(shows) {
         podcastContainer.appendChild(podcast);
     };
     // function to display podcasts to html - tyler
-  };
+};
 
-    // open modal
-    var openModal = function() {
-        var modal = document.querySelector(".modal");
-        modal.classList.add('is-active');
+// open modal
+var openModal = function() {
+    var modal = document.querySelector(".modal");
+    modal.classList.add('is-active');
+}
+
+// change modal text
+var changeContent = function(innerText) {
+    var modalText = document.querySelector("#modal-text")
+    modalText.innerHTML = innerText;
+}
+
+// modal trigger
+document.addEventListener('DOMContentLoaded', () => {
+// Functions to close a modal
+function closeModal($el) {
+  $el.classList.remove('is-active');
+}
+
+function closeAllModals() {
+  (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+    closeModal($modal);
+  });
+}
+
+// Add a click event on buttons to open a specific modal
+(document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+    const modal = $trigger.dataset.target;
+    const $target = document.getElementById(modal);
+    console.log($target);
+
+    $trigger.addEventListener('click', () => {
+      openModal($target);
+    });
+  });
+
+  // Add a click event on various child elements to close the parent modal
+  (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+    const $target = $close.closest('.modal');
+
+    $close.addEventListener('click', () => {
+      closeModal($target);
+    });
+  });
+
+  // Add a keyboard event to close all modals
+  document.addEventListener('keydown', (event) => {
+    const e = event || window.event;
+
+    if (e.keyCode === 27) { // Escape key
+      closeAllModals();
     }
+  });
+});
 
-    // change modal text
-    var changeContent = function(innerText) {
-        var modalText = document.querySelector("#modal-text")
-        modalText.innerHTML = innerText;
-    }
-
-    // modal trigger
-    document.addEventListener('DOMContentLoaded', () => {
-        // Functions to close a modal
-        function closeModal($el) {
-          $el.classList.remove('is-active');
-        }
-      
-        function closeAllModals() {
-          (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-            closeModal($modal);
-          });
-        }
-      
-        // Add a click event on buttons to open a specific modal
-        (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-          const modal = $trigger.dataset.target;
-          const $target = document.getElementById(modal);
-          console.log($target);
-      
-          $trigger.addEventListener('click', () => {
-            openModal($target);
-          });
-        });
-      
-        // Add a click event on various child elements to close the parent modal
-        (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-          const $target = $close.closest('.modal');
-      
-          $close.addEventListener('click', () => {
-            closeModal($target);
-          });
-        });
-      
-        // Add a keyboard event to close all modals
-        document.addEventListener('keydown', (event) => {
-          const e = event || window.event;
-      
-          if (e.keyCode === 27) { // Escape key
-            closeAllModals();
-          }
-        });
-      });
-
-      // Save recent searches to local storage
-      var saveSearch = function (search) {
-        if (recentSearches.indexOf(search)=== -1) {
-            recentSearches.push(search)
-        
-            if (recentSearches.length > 10) {
-                recentSearches.shift();
-            }
+// Save recent searches to local storage
+var saveSearch = function(search) {
+  if (recentSearches.indexOf(search)=== -1) {
+      recentSearches.push(search)
   
-            localStorage.setItem("recentSearches", JSON.stringify(recentSearches))
-        }
-        }
-
-      // Display array from local storage
-      var displaySearches = function () {
-
-        // if there are no searches, set tasks to an empty array and return out of the function
-        if (!recentSearches) {
-            return false;
-        }
-
-        // loop through savedSearches array
-        for (var i = 0; i < recentSearches.length; i++) {
-            //pass each task object into the html ul section
-            let li = document.createElement("li").innerHTML = recentSearches [i];
-            document.getElementById.appendChild("recentSearches");
-        }
+      if (recentSearches.length > 10) {
+          recentSearches.shift();
       }
-      //document.getElementById("recentSearches").innerHTML = recentSearches;
+
+      localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+  }
+};
+    //document.getElementById("recentSearches").innerHTML = recentSearches;
+
+// Display array from local storage
+var displaySearches = function() {
+  // if there are no searches, set tasks to an empty array and return out of the function
+  if (!recentSearches) {
+      return false;
+  } else {
+  
+  // add UL
+  var recentSearchesListEl = document.createElement("div");
+
+  // loop through savedSearches array
+  for (var i = 0; i < recentSearches.length; i++) {
+    //pass each task object into the html ul section
+    var search = document.createElement("button");
+    search.textContent = recentSearches[i];
+    // search.on("click", formSubmitHandler(recentSearches[i]));
+    search.classList = "button is-rounded is-fullwidth";
+
+    recentSearchesListEl.appendChild(search);
+    recentSearchesEl.appendChild(recentSearchesListEl);
+  }
+};
 
 // category button event listener - rachel
 categoryBtn.on("click", function(event) {
@@ -243,8 +251,10 @@ categoryBtn.on("click", function(event) {
     }
   getApplePodShowRepos(category);
   getSubjectTitles(category);
-});
-
+  });
+};
 
 // category button event listener - rachel
 searchFormEl.addEventListener("submit", formSubmitHandler);
+
+displaySearches(recentSearches);

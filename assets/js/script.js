@@ -29,7 +29,7 @@ var formSubmitHandler = function(event) {
 // pull from Apple Podcasts API - lilly
 var getApplePodShowRepos = function(show) {
     // format the apple api url
-    var apiUrl = "https://cors-proxy.htmldriven.com/?url=https://itunes.apple.com/search?term=" + show + "&entity=podcast&attribute=keywordsTerm&crossorigin=use-credentials&type=module&limit=20";
+    var apiUrl = "https://itunes.apple.com/search?term=" + show + "&entity=podcast&attribute=keywordsTerm&crossorigin=use-credentials&type=module&limit=20";
     
     // make a request to the url
     fetch(apiUrl).then(function(response) {
@@ -78,9 +78,9 @@ var getSubjectTitles = function(book) {
       changeContent("Error: search term not found. Please try again.");
     });
 };
-// end Josh's fetch section
+// pull from Open Library API - Josh
 
-// display book fetch results - rachel
+// display book fetch results - rachel & tyler
 var displayBooks = function (data) {
 
   $("#book-content").empty();
@@ -114,7 +114,7 @@ var displayBooks = function (data) {
     bookContainer.appendChild(bookDetails);
     };
 };
-// display book results - rachel
+// display book results - rachel & tyler
 
 // function to display podcasts to html - tyler
 var displayPods = function(shows) {
@@ -145,9 +145,10 @@ var displayPods = function(shows) {
         podcast.appendChild(title);
         podcastContainer.appendChild(podcast);
     };
-    // function to display podcasts to html - tyler
 };
+// function to display podcasts to html - tyler
 
+// modals - jessica
 // open modal
 var openModal = function() {
     var modal = document.querySelector(".modal");
@@ -202,8 +203,9 @@ function closeAllModals() {
     }
   });
 });
+// modals - jessica
 
-// Save recent searches to local storage
+// Save recent searches to local storage - jessica
 var saveSearch = function(search) {
   if (recentSearches.indexOf(search)=== -1) {
       recentSearches.push(search)
@@ -217,27 +219,55 @@ var saveSearch = function(search) {
   }
 };
 
-// Display array from local storage
+// Save recent searches to local storage - jessica
+
+
+// Display array from local storage - jessica & lilly
 var displaySearches = function() {
   // if there are no searches, set tasks to an empty array and return out of the function
   if (!recentSearches) {
       return false;
   } else {
-  
   // add UL
   var recentSearchesListEl = document.createElement("div");
+  recentSearchesListEl.setAttribute("id", "item");
 
   // loop through savedSearches array
-  for (var i = 0; i < recentSearches.length; i++) {
+  for (var i = 0; i < recentSearches.length; i++) {    
     //pass each task object into the html ul section
     var search = document.createElement("button");
+    search.setAttribute("value", recentSearches[i]);
     search.textContent = recentSearches[i];
-    search.classList = "button is-rounded is-fullwidth mb-1";
+
+    search.classList = "button is-rounded is-fullwidth";
+
 
     recentSearchesListEl.appendChild(search);
-    recentSearchesEl.appendChild(recentSearchesListEl);
+    recentSearchesEl.appendChild(recentSearchesListEl);  
   }
 };
+
+// make recent searches clickable and display results on page - lilly
+$("#item").on("click", "button", function () {
+  var buttonText = $(this).attr("value");
+  console.log(buttonText);
+  recentSearchLoad(buttonText);
+});
+// make recent searches clickable and display results on page - lilly
+
+var recentSearchLoad = function(load) {
+  // get value from seach input
+
+  if(load) {
+      getApplePodShowRepos(load);
+      getSubjectTitles(load);
+      searchInputEl.value = "";
+  } else {
+      openModal();
+      changeContent("Please enter a valid category");
+  }
+};
+// Display array from local storage - jessica & lilly
 
 // category button event listener - rachel
 categoryBtn.on("click", function(event) {
@@ -256,4 +286,5 @@ categoryBtn.on("click", function(event) {
 // category button event listener - rachel
 searchFormEl.addEventListener("submit", formSubmitHandler);
 
+// display recent searchs on page at page load
 displaySearches(recentSearches);

@@ -48,3 +48,11 @@
     padding: 10px 0px;
     font-size: 1rem;
 }
+
+  .categories button {
+    margin-bottom: 5px;
+  }
+
+  .recent button {
+    margin-bottom: 5px;
+  }
